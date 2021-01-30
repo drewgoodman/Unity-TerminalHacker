@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Hacker : MonoBehaviour
@@ -58,14 +56,15 @@ public class Hacker : MonoBehaviour
 
     void RunMainMenu(string input)
     {
-        if (input == "007")
-        {
-            Terminal.WriteLine("Please select a level, Mr. Bond.");
-        }
-        else if (input == "1" || input == "2" || input == "3")
+        bool isValidLevelNumber = (input == "1" || input == "2" || input == "3");
+        if (isValidLevelNumber)
         {
             level = int.Parse(input);
             StartGame();
+        }
+        else if (input == "007")
+        {
+            Terminal.WriteLine("Please select a level, Mr. Bond.");
         }
         else
         {
@@ -73,29 +72,39 @@ public class Hacker : MonoBehaviour
         }
     }
 
+    // void Update() {
+    //     int index = Random.Range(0, level1Passwords.Length);
+    //     print(index);
+    //     // PRINT EVERY FRAME TO TEST IN UNITY DEBUG CONSOLE
+    // }
+
     void StartGame()
     {
         currentScreen = Screen.Password;
         Terminal.ClearScreen();
-        Terminal.WriteLine("You have chosen level " + level);
-        if (level == 1)
+        switch(level)
         {
-            Terminal.WriteLine("Log into your Instagram Account!");
-            password = level1Passwords[4];
-            passwordHint = "WLOOLF";
-
-        }
-        else if (level == 2)
-        {
-            Terminal.WriteLine("Log into the DMV registry!");
-            password = level2Passwords[1];
-            passwordHint = "FARCFIT";
-        }
-        else if (level == 3)
-        {
-            Terminal.WriteLine("Log into your Swiss Bank Account!");
-            password = level3Passwords[1];
-            passwordHint = "IIDNEVDN";
+            case 1:
+                Terminal.WriteLine("Log into your Instagram Account!");
+                int index1 = Random.Range(0, level1Passwords.Length);
+                password = level1Passwords[index1];
+                passwordHint = "WLOOLF";
+                break;
+            case 2:
+                Terminal.WriteLine("Log into the DMV registry!");
+                int index2 = Random.Range(0, level2Passwords.Length);
+                password = level2Passwords[index2];
+                passwordHint = "FARCFIT";
+                break;
+            case 3:
+                Terminal.WriteLine("Log into your Swiss Bank Account!");
+                int index3 = Random.Range(0, level3Passwords.Length);
+                password = level3Passwords[index3];
+                passwordHint = "IIDNEVDN";
+                break;
+            default:
+                Debug.LogError("Invalid level number!!");
+                break;
         }
         Terminal.WriteLine("PASSWORD HINT: " + passwordHint);
         Terminal.WriteLine("Please enter your password: ");
@@ -112,6 +121,5 @@ public class Hacker : MonoBehaviour
             Terminal.WriteLine("Incorrect, try again. HINT: " + passwordHint);
         }
     }
-
 
 }
