@@ -4,6 +4,19 @@ using UnityEngine;
 
 public class Hacker : MonoBehaviour
 {
+
+    // GAME CONFIG DATA
+
+    string[] level1Passwords = {
+        "friend", "status", "share", "like", "follow"
+    };
+    string[] level2Passwords = {
+        "season", "traffic", "parallel", "parking", "license", "roadside", "sidewalk"
+    };
+    string[] level3Passwords = {
+        "investment", "dividend", "retirement", "insurance", "interest", "compound"
+    };
+
     // GAME STATE
     int level;
     string password;
@@ -25,8 +38,6 @@ public class Hacker : MonoBehaviour
         Terminal.WriteLine("1. Hack an Instagram account");
         Terminal.WriteLine("2. Hack the DMV");
         Terminal.WriteLine("3. Hack a bank");
-        Terminal.WriteLine("///////////////////////");
-        Terminal.WriteLine("Please input a number: ");
     }
 
     void OnUserInput(string input)
@@ -65,24 +76,25 @@ public class Hacker : MonoBehaviour
     void StartGame()
     {
         currentScreen = Screen.Password;
+        Terminal.ClearScreen();
         Terminal.WriteLine("You have chosen level " + level);
         if (level == 1)
         {
             Terminal.WriteLine("Log into your Instagram Account!");
-            password = "follow";
+            password = level1Passwords[4];
             passwordHint = "WLOOLF";
 
         }
         else if (level == 2)
         {
             Terminal.WriteLine("Log into the DMV registry!");
-            password = "traffic";
+            password = level2Passwords[1];
             passwordHint = "FARCFIT";
         }
         else if (level == 3)
         {
             Terminal.WriteLine("Log into your Swiss Bank Account!");
-            password = "dividend";
+            password = level3Passwords[1];
             passwordHint = "IIDNEVDN";
         }
         Terminal.WriteLine("PASSWORD HINT: " + passwordHint);
@@ -91,7 +103,8 @@ public class Hacker : MonoBehaviour
 
     void RunPassword(string input)
     {
-        if (input == password) {
+        string guess = input.ToLower();
+        if (guess == password) {
             Terminal.WriteLine("That's correct!");
         }
         else
