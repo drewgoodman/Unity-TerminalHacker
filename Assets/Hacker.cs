@@ -18,7 +18,6 @@ public class Hacker : MonoBehaviour
     // GAME STATE
     int level;
     string password;
-    string passwordHint;
     enum Screen { MainMenu, Password, Win };
     Screen currentScreen;
 
@@ -52,6 +51,10 @@ public class Hacker : MonoBehaviour
         {
             RunPassword(input);
         }
+        else if (currentScreen == Screen.Win)
+        {
+            ShowMainMenu();
+        }
     }
 
     void RunMainMenu(string input)
@@ -60,7 +63,7 @@ public class Hacker : MonoBehaviour
         if (isValidLevelNumber)
         {
             level = int.Parse(input);
-            StartGame();
+            AskForPassword();
         }
         else if (input == "007")
         {
@@ -72,54 +75,85 @@ public class Hacker : MonoBehaviour
         }
     }
 
-    // void Update() {
-    //     int index = Random.Range(0, level1Passwords.Length);
-    //     print(index);
-    //     // PRINT EVERY FRAME TO TEST IN UNITY DEBUG CONSOLE
-    // }
+    void DisplayHint()
+    {
+        Terminal.WriteLine("HINT: " + password.Anagram().ToUpper());
+    }
 
-    void StartGame()
+    void AskForPassword()
     {
         currentScreen = Screen.Password;
         Terminal.ClearScreen();
+        DisplayChallenge();
+        Terminal.WriteLine("Enter your password.");
+        DisplayHint();
+    }
+
+    void DisplayChallenge()
+    {
         switch(level)
         {
             case 1:
                 Terminal.WriteLine("Log into your Instagram Account!");
-                int index1 = Random.Range(0, level1Passwords.Length);
-                password = level1Passwords[index1];
-                passwordHint = "WLOOLF";
+                password = CreateRandomPassword(level1Passwords);
                 break;
             case 2:
                 Terminal.WriteLine("Log into the DMV registry!");
-                int index2 = Random.Range(0, level2Passwords.Length);
-                password = level2Passwords[index2];
-                passwordHint = "FARCFIT";
+                password = CreateRandomPassword(level2Passwords);
                 break;
             case 3:
                 Terminal.WriteLine("Log into your Swiss Bank Account!");
-                int index3 = Random.Range(0, level3Passwords.Length);
-                password = level3Passwords[index3];
-                passwordHint = "IIDNEVDN";
+                password = CreateRandomPassword(level3Passwords);
                 break;
             default:
                 Debug.LogError("Invalid level number!!");
                 break;
         }
-        Terminal.WriteLine("PASSWORD HINT: " + passwordHint);
-        Terminal.WriteLine("Please enter your password: ");
+    }
+
+    string CreateRandomPassword(string[] passwordBank)
+    {
+        int index = Random.Range(0, passwordBank.Length);
+        return passwordBank[index];
     }
 
     void RunPassword(string input)
     {
         string guess = input.ToLower();
         if (guess == password) {
-            Terminal.WriteLine("That's correct!");
+            DisplayWinScreen();
         }
         else
         {
-            Terminal.WriteLine("Incorrect, try again. HINT: " + passwordHint);
+            Terminal.WriteLine("Incorrect, try again.");
+            DisplayHint();
         }
+    }
+
+    void DisplayWinScreen()
+    {
+        currentScreen = Screen.Win;
+        Terminal.ClearScreen();
+        ShowLevelReward();
+    }
+
+    void ShowLevelReward()
+    {
+        switch(level)
+        {
+            case 1:
+                Terminal.WriteLine("That's correct!");
+                break;
+            case 2:
+                Terminal.WriteLine("Good job!");
+                break;
+            case 3:
+                Terminal.WriteLine("Outstanding work!");
+                break;
+            default:
+                break;
+        }
+        Terminal.WriteLine("Press ENTER to return to menu.");
     }
 
 }
