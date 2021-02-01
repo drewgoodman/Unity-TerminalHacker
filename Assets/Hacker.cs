@@ -35,21 +35,27 @@ public class Hacker : MonoBehaviour
         Terminal.WriteLine("1. Hack an Instagram account");
         Terminal.WriteLine("2. Hack the DMV");
         Terminal.WriteLine("3. Hack a bank");
+        DisplayControls();
     }
 
     void OnUserInput(string input)
     {
-        if (input == "menu") // we can always go direct to main menu
+        var cleanInput = input.Trim().ToLower();
+        if (cleanInput == "menu") // we can always go direct to main menu
         {
             ShowMainMenu();
         }
+        else if (cleanInput == "quit")
+        {
+            QuitGame();
+        }
         else if (currentScreen == Screen.MainMenu)
         {
-            RunMainMenu(input);
+            RunMainMenu(cleanInput);
         }
         else if (currentScreen == Screen.Password)
         {
-            RunPassword(input);
+            RunPassword(cleanInput);
         }
         else if (currentScreen == Screen.Win)
         {
@@ -75,6 +81,10 @@ public class Hacker : MonoBehaviour
         }
     }
 
+    void DisplayControls()
+    {
+        Terminal.WriteLine("You can type [menu] or [quit] anytime.");
+    }
     void DisplayHint()
     {
         Terminal.WriteLine("HINT: " + password.Anagram().ToUpper());
@@ -87,6 +97,7 @@ public class Hacker : MonoBehaviour
         DisplayChallenge();
         Terminal.WriteLine("Enter your password.");
         DisplayHint();
+        DisplayControls();
     }
 
     void DisplayChallenge()
@@ -119,13 +130,13 @@ public class Hacker : MonoBehaviour
 
     void RunPassword(string input)
     {
-        string guess = input.ToLower();
-        if (guess == password) {
+        if (input == password) {
             DisplayWinScreen();
         }
         else
         {
             Terminal.WriteLine("Incorrect, try again.");
+            DisplayControls();
             DisplayHint();
         }
     }
@@ -155,5 +166,11 @@ public class Hacker : MonoBehaviour
         }
         Terminal.WriteLine("Press ENTER to return to menu.");
     }
+
+    void QuitGame()
+    {
+        Application.Quit();
+    }
+
 
 }
